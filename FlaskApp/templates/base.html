@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bitcoin Price Analysis</title>
+</head>
+<body>
+    <h1>Bitcoin Price Analysis</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for price in prices %}
+            <tr>
+                <td>{{ price.date }}</td>
+                <td>{{ price.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
