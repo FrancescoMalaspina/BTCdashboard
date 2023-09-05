@@ -9,7 +9,7 @@ db_path = "database/BTC-USD.csv"
 
 def layout(data=pd.read_csv(db_path)):
     return html.Div([
-        html.H1('Homepage'),
+        html.H1('Analytics'),
         dcc.Dropdown(
             id='y-axis-scale',
             options=[
