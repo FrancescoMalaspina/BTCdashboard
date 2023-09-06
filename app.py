@@ -1,10 +1,10 @@
-from dash import Dash, html, dcc
+from dash import Dash
 import dash_bootstrap_components as dbc
 import dash
 import pandas as pd
 from components import navbar
 
-app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 nav = navbar.Navbar()
 data = pd.read_csv("database/BTC-USD.csv")
 

@@ -4,7 +4,7 @@ import dash_latex as dl
 import plotly.express as px
 import dash_bootstrap_components as dbc
 import pandas as pd
-from .tools import log_return_chart, rolling_volatility_chart
+from .tools import log_return_chart, rolling_volatility_chart, log_return_histogram, log_log_return_histogram
 
 dash.register_page(__name__)
 db_path = "database/BTC-USD.csv"
@@ -57,9 +57,14 @@ def layout(data=pd.read_csv(db_path)):
                     id='rolling-volatility',
                     config={'staticPlot': False},
                     figure=rolling_volatility_chart(data, window=200)),
+                html.H4("Beyond GBM"),
                 dbc.Row([
-                    dbc.Col(),
-                    dbc.Col()
+                    dbc.Col(dcc.Graph(
+                        figure=log_return_histogram(data)
+                    )),
+                    dbc.Col(dcc.Graph(
+                        figure=log_log_return_histogram(data)
+                    )),
                 ])
             ]),
         ])
