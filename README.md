@@ -54,3 +54,4 @@ python app.py
 * [Dash bootstrap components](https://dash-bootstrap-components.opensource.faculty.ai)
 * [Yahoo finance BTC-USD](https://finance.yahoo.com/quote/BTC-USD/history?p=BTC-USD)
 ## Licence
+This project is licensed under the terms of the MIT license.
