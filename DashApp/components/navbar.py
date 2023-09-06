@@ -9,7 +9,7 @@ def Navbar():
                 dbc.NavItem(dbc.NavLink("Home", href="/")),
                 dbc.NavItem(dbc.NavLink("Analytics", href="/analytics")),
             ],
-            brand="BTC price analysis",
+            brand="BTC dashboard",
             brand_href="/",
             color="dark",
             dark=True,

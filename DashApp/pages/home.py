@@ -13,6 +13,8 @@ def layout(data=pd.read_csv(db_path)):
         html.Br(),
         dbc.Row("Welcome to the homepage!"),
         html.Br(),
+        html.H2("Historical price"),
+        html.Br(),
         dbc.Row(
             [
                 dbc.Col("Select y-axis scale:", width="auto"),
@@ -42,7 +44,7 @@ def layout(data=pd.read_csv(db_path)):
         dbc.Table(dash_table.DataTable(
             id='price-table',
             columns=[{"name": col, "id": col} for col in data.columns],
-            data=data.head(10).to_dict('records')
+            data=data.tail(10).to_dict('records')
         ), bordered=True)],
         fluid=True)
 
@@ -73,20 +75,7 @@ def update_figure(y_scale, x_range, data=pd.read_csv(db_path)):
         high=data["High"],
         low=data["Low"]
     )])
-    updated_figure.update_layout(xaxis_rangeslider_visible=False).update_yaxes(type=yaxis_type)
+    updated_figure.update_layout(xaxis_rangeslider_visible=False, title_text="Candlestick price chart")
+    updated_figure.update_xaxes(title_text="date")
+    updated_figure.update_yaxes(type=yaxis_type, title_text="price")
     return updated_figure
-
-#
-# @callback(
-#     Output('price-box', 'children'),
-#     Input('x-axis-range', 'value')
-# )
-# def update_price_box(x_range, data=pd.read_csv(db_path)):
-#     if x_range == "Max":
-#         pass
-#     year_open = data['Open'][0]
-#     year_close = data['Close'][-1]
-#     year_variation = ((year_close - year_open) / year_open) * 100
-#     color = 'green' if year_variation >= 0 else 'red'
-#     return [html.H4(f"Current Price: {year_close}"),
-#             html.P(f"Year Variation: {year_variation:.2f}%", style={'color': color})]
