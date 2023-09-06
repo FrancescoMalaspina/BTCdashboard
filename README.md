@@ -7,6 +7,11 @@ I want to create a dashboard for tracking Bitcoin price, implementing a few Stoc
 ## Requirements
 
 * Python 3
+* dash>=2.5
+* dash-bootstrap-components
+* dash-latex
+* pandas
+* plotly
 
 ## How to run this app
 
