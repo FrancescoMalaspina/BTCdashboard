@@ -2,7 +2,9 @@
 
 ## About this app
 
-I want to create a dashboard for tracking Bitcoin price, implementing a few Stochastic Calculus analyses, and building a toy Put/Call option, based on Black&Scholes European option pricing.
+I want to create a dashboard for tracking Bitcoin price, implementing a few Stochastic Calculus analyses, and building a toy Put/Call option (TODO), based on Black&Scholes European option pricing.
+
+The app is deployed in `pythonanywhere` at link [http://photonicaardvark.eu.pythonanywhere.com/](http://photonicaardvark.eu.pythonanywhere.com/).
 
 ## Requirements
 
@@ -50,4 +52,5 @@ python app.py
 
 * [Dash](https://dash.plot.ly/)
 * [Dash bootstrap components](https://dash-bootstrap-components.opensource.faculty.ai)
+* [Yahoo finance BTC-USD](https://finance.yahoo.com/quote/BTC-USD/history?p=BTC-USD)
 ## Licence
