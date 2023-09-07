@@ -1,9 +1,12 @@
+# Third party imports
 import dash
 from dash import html, dcc, Input, Output, callback
 import dash_latex as dl
 import plotly.express as px
 import dash_bootstrap_components as dbc
 import pandas as pd
+
+# Local package imports
 from .tools import log_return_chart, rolling_volatility_chart, log_return_histogram, log_log_return_histogram
 
 dash.register_page(__name__)
