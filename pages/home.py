@@ -36,58 +36,56 @@ def spot_price(data=data, day=None):
     return html_text
 
 
-def layout():
-    return dbc.Container([
-        # html.Br(),
-        # dbc.Row("Welcome to the homepage!"),
-        html.Br(),
-        dbc.Row([
-            dbc.Col(dbc.Card(
-                dbc.CardBody(spot_price(),
-                             id="BTC-price-card", className="card-text"),
-            ), className="w-33 mb-6", ),
-            dbc.Col([
-                dbc.Row([dbc.Col("Select day: ", align="right"),
-                         dbc.Col(dcc.DatePickerSingle(
-                             id='my-date-picker-single',
-                             min_date_allowed=data.iloc[1]["Date"],
-                             max_date_allowed=data.iloc[-1]["Date"],
-                             initial_visible_month=data.iloc[-1]["Date"],
-                             date=data.iloc[-1]["Date"]),),
-                         ], align="center"),
-            ]),
-        ], align="center"),
-        html.Br(),
-        html.H2("Historical price"),
-        html.Br(),
-        dbc.Row(
-            [
-                dbc.Col("Select price scale:", width="auto"),
-                dbc.Col(
-                    dcc.Dropdown(
-                        id='y-axis-scale',
-                        options=[{'label': 'Linear scale', 'value': 'linear'},
-                                 {'label': 'Logarithmic scale', 'value': 'log'}],
-                        value='linear',
-                        clearable=False)),
-                dbc.Col("Select period range:", width="auto"),
-                dbc.Col(
-                    dcc.Dropdown(
-                        id='x-axis-range',
-                        options=[
-                            {'label': '1W', 'value': -7},
-                            {'label': '1M', 'value': -30},
-                            {'label': '6M', 'value': -180},
-                            {'label': 'YTD', 'value': 'YTD'},
-                            {'label': '1Y', 'value': -365},
-                            {'label': 'All time', 'value': 'Max'}],
-                        value=-30))]),
-        dcc.Graph(
-            id='candlestick-price-chart',
-            config={'staticPlot': False},
-            figure={}),
-    ],
-        fluid=True)
+layout = dbc.Container([
+    # html.Br(),
+    # dbc.Row("Welcome to the homepage!"),
+    html.Br(),
+    dbc.Row([
+        dbc.Col(dbc.Card(
+            dbc.CardBody(spot_price(),
+                         id="BTC-price-card", className="card-text"),
+        ), className="w-33 mb-6", ),
+        dbc.Col([
+            dbc.Row([dbc.Col("Select day: ", align="right"),
+                     dbc.Col(dcc.DatePickerSingle(
+                         id='my-date-picker-single',
+                         min_date_allowed=data.iloc[1]["Date"],
+                         max_date_allowed=data.iloc[-1]["Date"],
+                         initial_visible_month=data.iloc[-1]["Date"],
+                         date=data.iloc[-1]["Date"]),),
+                     ], align="center"),
+        ]),
+    ], align="center"),
+    html.Br(),
+    html.H2("Historical price"),
+    html.Br(),
+    dbc.Row(
+        [
+            dbc.Col("Select price scale:", width="auto"),
+            dbc.Col(
+                dcc.Dropdown(
+                    id='y-axis-scale',
+                    options=[{'label': 'Linear scale', 'value': 'linear'},
+                             {'label': 'Logarithmic scale', 'value': 'log'}],
+                    value='linear',
+                    clearable=False)),
+            dbc.Col("Select period range:", width="auto"),
+            dbc.Col(
+                dcc.Dropdown(
+                    id='x-axis-range',
+                    options=[
+                        {'label': '1W', 'value': -7},
+                        {'label': '1M', 'value': -30},
+                        {'label': '6M', 'value': -180},
+                        {'label': 'YTD', 'value': 'YTD'},
+                        {'label': '1Y', 'value': -365},
+                        {'label': 'All time', 'value': 'Max'}],
+                    value=-30))]),
+    dcc.Graph(
+        id='candlestick-price-chart',
+        config={'staticPlot': False},
+        figure={}),
+], fluid=True)
 
 
 @callback(

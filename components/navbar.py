@@ -8,6 +8,7 @@ def Navbar():
             children=[
                 dbc.NavItem(dbc.NavLink("Home", href="/")),
                 dbc.NavItem(dbc.NavLink("Analytics", href="/analytics")),
+                dbc.NavItem(dbc.NavLink("Options", href="/options")),
             ],
             brand="BTC dashboard",
             brand_href="/",
