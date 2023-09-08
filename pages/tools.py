@@ -4,6 +4,8 @@ import numpy as np
 import plotly.express as px
 from scipy.stats import norm
 
+from .option_pricing.black_scholes import BlackScholesModel, OptionType
+
 
 def log_returns(price_db):
     price_db["LogReturns"] = np.log(price_db["Close"]) - np.log(price_db["Close"].shift(1))
@@ -68,6 +70,15 @@ def log_log_return_histogram(price_db):
     fig.add_scatter(x=x, y=p, mode='lines', name=name, line=dict(color='red', width=2))
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=.85, xanchor="left", x=0.01))
     fig.update_yaxes(type="log", range=[-2, 1.6])
+    return fig
+
+
+def call_spot_curve(X, T, r, v):
+    spot_prices = np.linspace(X/2, 3*X/2, 1000)
+    call_prices = BlackScholesModel(spot_prices, X, T, r, v).option_price(OptionType.CALL_OPTION)
+
+    fig = px.line(call_prices, x=spot_prices, y=call_prices, labels={"x": "Spot Price", "y": "Option Price"}, name="Option price")
+    fig.add_scatter(x=spot_prices, y=np.maximum(0, spot_prices - X), mode="lines", name="Payoff")
     return fig
 
 

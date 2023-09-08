@@ -21,7 +21,7 @@ class BlackScholesModel(OptionPriceModel):
     """
 
     def __init__(self, spot_price: float, strike_price: float, days_to_maturity: int = 100,
-                 risk_free_rate: float = 0.001, volatility: float = 0.01):
+                 risk_free_rate: float = 0.001, volatility: float = 0.5):
         """
         Initializes variables used in Black-Scholes formula .
 
@@ -45,7 +45,7 @@ class BlackScholesModel(OptionPriceModel):
          - N(d2): probability of option exercise
         """
         if self.T == 0:
-            return self.S
+            return np.maximum(self.X-self.S, 0)
 
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         d2 = (np.log(self.S / self.X) + (self.r - 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
@@ -60,7 +60,7 @@ class BlackScholesModel(OptionPriceModel):
          - N(d2): probability of option exercise
         """
         if self.T == 0:
-            return self.S
+            return np.maximum(-self.X+self.S, 0)
 
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         d2 = (np.log(self.S / self.X) + (self.r - 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
