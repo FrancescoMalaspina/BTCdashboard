@@ -25,38 +25,40 @@ def spot_price(data=data, day=None):
         percentage_variation = 0
         variation = 0
     else:
-        variation = price-prev_price
-        percentage_variation = variation/prev_price
+        variation = price - prev_price
+        percentage_variation = variation / prev_price
 
     html_text = html.H4([f"{price:.2f} USD",
-        html.Span(
-            f"{variation:.2f} ({percentage_variation:.4f}%)",
-            style={
-                "color": "red" if percentage_variation < 0 else "green",
-                "font-size": "18px",
-                "margin-left": "10px"})])
+                         html.Span(
+                             f"{variation:.2f} ({percentage_variation:.4f}%)",
+                             style={
+                                 "color": "red" if percentage_variation < 0 else "green",
+                                 "font-size": "18px",
+                                 "margin-left": "10px"})])
     return html_text
 
+
+date_picker = dbc.InputGroup([
+    dbc.InputGroupText("Select day"),
+    dcc.DatePickerSingle(
+        id='my-date-picker-single',
+        min_date_allowed=data.iloc[1]["Date"],
+        max_date_allowed=data.iloc[-1]["Date"],
+        initial_visible_month=data.iloc[-1]["Date"],
+        date=data.iloc[-1]["Date"]
+    )
+])
 
 layout = dbc.Container([
     # html.Br(),
     # dbc.Row("Welcome to the homepage!"),
     html.Br(),
     dbc.Row([
+        dbc.Col([date_picker], width={"size": 3, "offset": 0.5}),
         dbc.Col(dbc.Card(
             dbc.CardBody(spot_price(),
-                         id="BTC-price-card", className="card-text"),
-        ), className="w-33 mb-6", ),
-        dbc.Col([
-            dbc.Row([dbc.Col("Select day: ", align="right"),
-                     dbc.Col(dcc.DatePickerSingle(
-                         id='my-date-picker-single',
-                         min_date_allowed=data.iloc[1]["Date"],
-                         max_date_allowed=data.iloc[-1]["Date"],
-                         initial_visible_month=data.iloc[-1]["Date"],
-                         date=data.iloc[-1]["Date"]),),
-                     ], align="center"),
-        ]),
+                         id="BTC-price-card"),
+        ),width={"size": 5, "offset": -1}),
     ], align="center"),
     html.Br(),
     html.H2("Historical price"),
@@ -87,7 +89,7 @@ layout = dbc.Container([
         id='candlestick-price-chart',
         config={'staticPlot': False},
         figure={}),
-], fluid=True)
+], fluid=False)
 
 
 @callback(
@@ -128,4 +130,3 @@ def update_figure(y_scale, x_range):
 )
 def update_card_body(day):
     return spot_price(data, day)
-

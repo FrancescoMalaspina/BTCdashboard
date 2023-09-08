@@ -17,17 +17,18 @@ def log_return_chart(price_db):
     return fig
 
 
-def rolling_volatility_chart(price_db, window=200):
+def rolling_volatility_chart(price_db, window=30):
     price_db = log_returns(price_db)
-    price_db["rollingVolatility"] = price_db["LogReturns"].rolling(window).std()
-    fig = px.line(price_db, x='Date', y="rollingVolatility", title=f"BTC rolling volatility for the previous {window} days",
+    price_db["rollingVolatility"] = price_db["LogReturns"].rolling(window).std() * np.sqrt(365)
+    fig = px.line(price_db, x='Date', y="rollingVolatility",
+                  title=f"BTC rolling (annualized) volatility for the previous {window} days",
                   labels="Rolling Volatility")
     ymin = 0
     ymax = price_db["rollingVolatility"].max()
     fig.update_yaxes(range=[ymin, ymax * 1.1])
     fig.update_traces(line=dict(color="black"))
     # historical volatility
-    fig.add_hline(y=price_db["LogReturns"].std(), line_dash="dash", line_color="red", name="Historical Volatility")
+    fig.add_hline(y=price_db["LogReturns"].std()*np.sqrt(365), line_dash="dash", line_color="red", name="Historical Volatility")
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=.99, xanchor="left", x=0))
     fig.update_layout(showlegend=True)
     return fig

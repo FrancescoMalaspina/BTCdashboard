@@ -17,7 +17,7 @@ class BlackScholesModel(OptionPriceModel):
     - The risk-free rate and volatility are constant.
     - Absence of arbitrage.
     - Efficient Market Hypothesis - market movements follow a Geometric Brownian Motion:
-        Lognormal distribution of underlying returns.
+       - Lognormal distribution of underlying returns.
     """
 
     def __init__(self, spot_price: float, strike_price: float, days_to_maturity: int = 100,
@@ -29,11 +29,11 @@ class BlackScholesModel(OptionPriceModel):
         :param strike_price: strike price at maturity for option contract
         :param days_to_maturity: time periods (days) to maturity/exercise date
         :param risk_free_rate: returns on risk-free assets (assumed constant until maturity)
-        :param volatility: daily volatility of the underlying asset (assumed constant until maturity)
+        :param volatility: annual volatility of the underlying asset (assumed constant until maturity)
         """
         self.S = spot_price
         self.X = strike_price
-        self.T = days_to_maturity
+        self.T = days_to_maturity/365
         self.r = risk_free_rate
         self.sigma = volatility
 
@@ -44,6 +44,9 @@ class BlackScholesModel(OptionPriceModel):
          - N(d1): Delta edging -> fraction of the stock to hold for risk neutralization
          - N(d2): probability of option exercise
         """
+        if self.T == 0:
+            return self.S
+
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         d2 = (np.log(self.S / self.X) + (self.r - 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
 
@@ -56,6 +59,9 @@ class BlackScholesModel(OptionPriceModel):
          - N(d1): Delta edging -> fraction of the stock to hold for risk neutralization
          - N(d2): probability of option exercise
         """
+        if self.T == 0:
+            return self.S
+
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         d2 = (np.log(self.S / self.X) + (self.r - 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
 
@@ -76,6 +82,9 @@ class BlackScholesModel(OptionPriceModel):
         """
         :return: N(d1)
         """
+        if self.T == 0:
+            return 1
+
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         return norm.cdf(d1, 0.0, 1.0)
 
@@ -83,6 +92,9 @@ class BlackScholesModel(OptionPriceModel):
         """
         :return: 1-N(-d1)
         """
+        if self.T == 0:
+            return 1
+
         d1 = (np.log(self.S / self.X) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         return 1-norm.cdf(1-d1, 0.0, 1.0)
 
