@@ -1,8 +1,10 @@
+# Third party imports
 import dash
 from dash import html, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from datetime import date
+
+# Local package imports
 from .data import BTCprice as data
 
 dash.register_page(__name__, path='/')
