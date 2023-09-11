@@ -51,7 +51,7 @@ date_picker = dbc.InputGroup([
         max_date_allowed=data.iloc[-1]["Date"],
         initial_visible_month=data.iloc[-1]["Date"],
         date=data.iloc[-1]["Date"]
-    )
+    ),
 ])
 
 col1 = dbc.Col([
@@ -68,27 +68,28 @@ col1 = dbc.Col([
     html.H5("Graph options"),
     # html.Br(),
     dbc.InputGroup([
-        dbc.InputGroupText("Scale"),
         dbc.Select(
             id='y-axis-scale',
             options=[{'label': 'Linear', 'value': 'linear'},
                      {'label': 'Logarithmic', 'value': 'log'}],
             value='linear',
         ),
+        dbc.InputGroupText("Scale", style={"width": 75}),
     ]),
     html.Br(),
     dbc.InputGroup([
         dbc.Select(
             id='x-axis-range',
             options=[
-                {'label': '1W', 'value': -7},
-                {'label': '1M', 'value': -30},
-                {'label': '6M', 'value': -180},
+                {'label': '1 week', 'value': -7},
+                {'label': '1 month', 'value': -30},
+                {'label': '6 months', 'value': -180},
                 {'label': 'YTD', 'value': 'YTD'},
-                {'label': '1Y', 'value': -365},
+                {'label': '1 year', 'value': -365},
                 {'label': 'All time', 'value': 'Max'}],
             value=-30,
-        ), dbc.InputGroupText("Range"),
+        ),
+        dbc.InputGroupText("Range", style={"width": 75}),
     ]),
 ], width={"size": 3})
 

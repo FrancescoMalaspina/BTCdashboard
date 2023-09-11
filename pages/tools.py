@@ -4,7 +4,7 @@ import numpy as np
 import plotly.express as px
 from scipy.stats import norm
 
-from .option_pricing.black_scholes import BlackScholesModel, OptionType
+from components.option_pricing.black_scholes import BlackScholesModel, OptionType
 
 
 def log_returns(price_db):
@@ -77,7 +77,8 @@ def call_spot_curve(X, T, r, v):
     spot_prices = np.linspace(X/2, 3*X/2, 1000)
     call_prices = BlackScholesModel(spot_prices, X, T, r, v).option_price(OptionType.CALL_OPTION)
 
-    fig = px.line(call_prices, x=spot_prices, y=call_prices, labels={"x": "Spot Price", "y": "Option Price"}, name="Option price")
+    fig = px.line(call_prices, x=spot_prices, y=call_prices, labels={"x": "Spot Price", "y": "Option Price"},
+                  title='Call option price')
     fig.add_scatter(x=spot_prices, y=np.maximum(0, spot_prices - X), mode="lines", name="Payoff")
     return fig
 

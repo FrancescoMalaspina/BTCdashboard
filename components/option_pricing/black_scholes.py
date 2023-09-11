@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import norm
 
 # Local package imports
-from pages.option_pricing.base import OptionPriceModel, OptionType
+from components.option_pricing.base import OptionPriceModel, OptionType
 
 
 class BlackScholesModel(OptionPriceModel):
@@ -29,11 +29,11 @@ class BlackScholesModel(OptionPriceModel):
         :param strike_price: strike price at maturity for option contract
         :param days_to_maturity: time periods (days) to maturity/exercise date
         :param risk_free_rate: returns on risk-free assets (assumed constant until maturity)
-        :param volatility: annual volatility of the underlying asset (assumed constant until maturity)
+        :param volatility: per day volatility of the underlying asset (assumed constant until maturity)
         """
         self.S = spot_price
         self.X = strike_price
-        self.T = days_to_maturity/365
+        self.T = days_to_maturity
         self.r = risk_free_rate
         self.sigma = volatility
 

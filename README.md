@@ -46,7 +46,7 @@ python app.py
 
 ## Screenshot
 
-![screenshot](components/img/screencapture.png)
+![screenshot](assets/screencapture.png)
 
 ## Resources
 

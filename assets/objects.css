@@ -1,0 +1,15 @@
+.DateInput, .DateInput_1 {
+    border-radius: 0px 8px 8px 0px !important;
+}
+
+.DateInput_input, .DateInput_input_1 {
+    Height: 40px !important;
+    Width: 154% !important;
+    border-radius: inherit;
+}
+
+.SingleDatePickerInput__withBorder {
+    Width: 154% !important;
+    border-radius: 0px 8px 8px 0px;
+    border: 1px solid #ccc !important;
+}
