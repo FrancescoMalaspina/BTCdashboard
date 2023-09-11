@@ -73,13 +73,29 @@ def log_log_return_histogram(price_db):
     return fig
 
 
-def call_spot_curve(X, T, r, v):
-    spot_prices = np.linspace(X/2, 3*X/2, 1000)
+def call_spot_curve(S, X, T, r, v):
+    spot_prices = np.linspace(0, 2*X, 1000)
     call_prices = BlackScholesModel(spot_prices, X, T, r, v).option_price(OptionType.CALL_OPTION)
+    df = pd.DataFrame(index=spot_prices)
+    df.index.name = "Spot price"
+    df["C(S,X,T,r,v)"] = call_prices
+    df["Payoff"] = np.maximum(0, spot_prices - X)
 
-    fig = px.line(call_prices, x=spot_prices, y=call_prices, labels={"x": "Spot Price", "y": "Option Price"},
-                  title='Call option price')
-    fig.add_scatter(x=spot_prices, y=np.maximum(0, spot_prices - X), mode="lines", name="Payoff")
+    fig = px.line(df, x=df.index, y=df.columns, title='Call option')
+    fig.update_yaxes(title_text="Option price")
+    fig.add_vline(x=X, name="Strike price", line_color="green", line_dash="dot", showlegend=True)
+    fig.add_vline(x=S, name="Spot price", line_color="orange", line_dash="dash", showlegend=True)
+    return fig
+
+
+def delta_hedging_curve(S, X, T, r, v):
+    spot_prices = np.linspace(0, 2*S, 1000)
+    call_prices = BlackScholesModel(spot_prices, X, T, r, v).option_price(OptionType.CALL_OPTION)
+    df = pd.DataFrame(index=spot_prices)
+    df["C(S,X,T,r,v)"] = call_prices
+    df["Payoff"] = np.maximum(0, spot_prices - X)
+
+    fig = px.line(df, x=df.index, y=df.columns, labels={"x": "Spot Price", "y": "Option Price"}, title='Call option')
     return fig
 
 

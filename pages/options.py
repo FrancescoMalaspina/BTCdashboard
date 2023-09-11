@@ -2,6 +2,7 @@
 import dash
 from dash import html, Input, Output, callback, dcc
 import dash_bootstrap_components as dbc
+import numpy as np
 
 # Local package imports
 # from .data import BTCprice as data
@@ -17,30 +18,50 @@ call = dbc.Card([
 
 col1 = dbc.Col([
     dbc.Label("Spot price"),
-    dbc.InputGroup([
-        dbc.InputGroupText("S"),
-        dbc.Input(type="number", min=1, value=25000, id="input-S")
-    ]),
+    dcc.Slider(
+        id="input-S",
+        min=1,
+        max=40000,
+        step=1,
+        value=20000,
+        marks={i: str(i) for i in range(0, 40001, 10000)}
+    ),
     dbc.Label("Strike price"),
-    dbc.InputGroup([
-        dbc.InputGroupText("X"),
-        dbc.Input(type="number", min=1, value=25000, id="input-X")
-    ]),
+    dcc.Slider(
+        id="input-X",
+        min=1,
+        max=50000,
+        step=1,
+        value=25000,
+        marks={i: str(i) for i in range(0, 50001, 10000)}
+    ),
     dbc.Label("Periods to maturity"),
-    dbc.InputGroup([
-        dbc.InputGroupText("T"),
-        dbc.Input(type="number", min=1, step=1, value=30, id="input-T")
-    ]),
+    dcc.Slider(
+        id="input-T",
+        min=1,
+        max=365,
+        step=1,
+        value=180,
+        marks={i: str(i) for i in range(0, 366, 30)}
+    ),
     dbc.Label("Risk free interest rate"),
-    dbc.InputGroup([
-        dbc.InputGroupText("r"),
-        dbc.Input(type="number", min=1e-12, value=0.001, id="input-r")
-    ]),
+    dcc.Slider(
+        id="input-r",
+        min=1e-3,
+        max=0.1,
+        step=1e-3,
+        value=5e-2,
+        marks={i: f"{i*100:.0f}%" for i in np.linspace(0, 0.1, 11)}
+    ),
     dbc.Label("Volatility"),
-    dbc.InputGroup([
-        dbc.InputGroupText("v"),
-        dbc.Input(type="number", min=1e-6, value=1, id="input-v")
-    ]),
+    dcc.Slider(
+        id="input-v",
+        min=1e-2,
+        max=1.5,
+        step=1e-2,
+        value=0.75,
+        marks={i: f"{i*100:.0f}%" for i in np.linspace(0, 1.5, 11)}
+    ),
     html.Br(),
     call,
 ], width=4)
@@ -73,12 +94,13 @@ def update_call_price(S, X, T, r, v):
 @callback(
     Output('call-spot-curve', 'figure'),
     [
+     Input('input-S', 'value'),
      Input('input-X', 'value'),
-     Input('input-r', 'value'),
-     Input("input-T", "value"),
+     Input('input-T', 'value'),
+     Input("input-r", "value"),
      Input("input-v", "value")]
 )
-def update_call_price(X, T, r, v):
-    return call_spot_curve(X, T, r, v)
+def update_call_price(S, X, T, r, v):
+    return call_spot_curve(S, X, T, r, v)
 
 
