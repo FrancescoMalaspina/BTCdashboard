@@ -100,6 +100,8 @@ class BlackScholesModel(OptionPriceModel):
 
 
 if __name__ == "__main__":
+    print(BlackScholesModel(20000, 25000, 180, 0.05, 0.75).option_price(option_type=OptionType.CALL_OPTION))
+
     import matplotlib.pyplot as plt
     import pandas as pd
     spot_prices = np.linspace(90, 120, 100)
@@ -116,7 +118,7 @@ if __name__ == "__main__":
     plt.plot(spot_prices, payoff(spot_prices, 100), label="payoff")
     # plt.legend()
     plt.grid()
-    plt.show()
+    #plt.show()
 
     # delta hedging
     call_hedging = pd.DataFrame(index=spot_prices, columns=np.array([1, 10, 20]))
@@ -126,4 +128,4 @@ if __name__ == "__main__":
     # plot to test functionality
     call_hedging.plot(label=[f"maturity: T={T}" for T in call_hedging.columns])
     plt.grid()
-    plt.show()
+    #plt.show()

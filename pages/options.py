@@ -82,8 +82,8 @@ layout = dbc.Container([
     Output('call-price-card', 'children'),
     [Input('input-S', 'value'),
      Input('input-X', 'value'),
-     Input('input-r', 'value'),
-     Input("input-T", "value"),
+     Input('input-T', 'value'),
+     Input("input-r", "value"),
      Input("input-v", "value")]
 )
 def update_call_price(S, X, T, r, v):
