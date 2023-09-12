@@ -4,7 +4,7 @@ import dash
 from components import navbar
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.ZEPHYR], suppress_callback_exceptions=True)
-nav = navbar.Navbar()
+nav = navbar.NavbarLogo()
 
 app.layout = dbc.Container([
     nav,
