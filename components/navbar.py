@@ -26,30 +26,27 @@ def NavbarLogo():
     layout = html.Div([
         dbc.Navbar(
             [
-                html.A(
-                    # Use row and col to control vertical alignment of logo / brand
-                    dbc.Row(
-                        [
-                            dbc.Col(html.Img(src="/assets/BTClogo.png", height="45px",
-                                             style={"margin-left": "25px"})),
-                            dbc.Col(dbc.NavbarBrand("BTC dashboard", className="ml-2")),
-                        ],
-                        align="center",
-                    ),
-                    href="/",
-                ),
-                dbc.Row(
+                dbc.Container(
                     [
-                        dbc.Col(dbc.NavbarToggler(id="navbar-toggler", n_clicks=0, className="ms-auto"),),
-                        dbc.Col(
-                            dbc.Collapse(
-                                dbc.Nav(pages, navbar=True),
-                                id="navbar-collapse",
-                                is_open=False,
-                                navbar=True,
-                            ),
+                        dbc.Row(
+                            [
+                                dbc.Col(html.Img(src="/assets/BTClogo.png", height="45px", style={"margin-left": "0px"}), ),
+                                dbc.Col(dbc.NavbarBrand("BTC dashboard", className="ml-2"), ),
+                            ], align="center"),
+                        dbc.Row(
+                            [
+                                dbc.Col(dbc.NavbarToggler(id="navbar-toggler", n_clicks=0), ),
+                                dbc.Col(
+                                    dbc.Collapse(
+                                        dbc.Nav(pages, navbar=True, fill=True),
+                                        id="navbar-collapse",
+                                        is_open=False,
+                                        navbar=True,
+                                    ),
+                                ),
+                            ]
                         ),
-                    ], justify="end"
+                    ],
                 ),
             ],
             color="dark",
