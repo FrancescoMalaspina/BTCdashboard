@@ -128,4 +128,4 @@ if __name__ == "__main__":
     # plot to test functionality
     call_hedging.plot(label=[f"maturity: T={T}" for T in call_hedging.columns])
     plt.grid()
-    #plt.show()
+    plt.show()

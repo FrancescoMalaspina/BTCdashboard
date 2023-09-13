@@ -159,7 +159,7 @@ def update_figure(y_scale, x_range, selected_date):
         ]
     )
 
-    updated_figure.update_xaxes(title_text="date")
-    updated_figure.update_yaxes(type=yaxis_type, title_text="price")
+    updated_figure.update_xaxes(title_text="Date")
+    updated_figure.update_yaxes(type=yaxis_type, title_text="Price [USD]")
 
     return updated_figure

@@ -8,7 +8,7 @@ from components.option_pricing.black_scholes import BlackScholesModel, OptionTyp
 
 
 def log_returns(price_db):
-    price_db["LogReturns"] = np.log(price_db["Close"]) - np.log(price_db["Close"].shift(1))
+    price_db["LogReturns"] = np.log(price_db["Close"]).diff()
     return price_db
 
 
@@ -19,20 +19,57 @@ def log_return_chart(price_db):
     return fig
 
 
+def log_price_chart(price_db):
+    df = price_db.copy()
+    df["Close"] = np.log(df["Close"])
+    fig = px.line(df, x='Date', y=['Close'], title='BTC Price')
+    fig.update_yaxes(title_text="Log(Price)")
+    fig.update_layout(legend=dict(orientation="v", yanchor="top", y=.98, xanchor="left", x=0.02, title=None))
+
+    # Calculate the log returns of the closing prices
+    log_returns = df['Close'].diff().dropna()
+
+    # Fit a normal distribution on the log returns
+    mu, sigma = np.mean(log_returns), np.std(log_returns)
+
+    # Calculate the expected value and variance of the geometric brownian motion
+    S0 = df['Close'].iloc[0]  # The first closing price
+    N = df.index.size  # The number of time steps
+    t = np.arange(0, N)  # The time grid
+
+    E_S_t = S0 + (mu * t)
+    Var_S_t = (sigma ** 2 * t)
+
+    # Add the expected value and variance to the figure as traces
+    fig.add_scatter(x=df['Date'].iloc[-N - 1:], y=E_S_t, mode='lines', name='Expected Value')
+    fig.add_scatter(x=df['Date'].iloc[-N - 1:], y=E_S_t + np.sqrt(Var_S_t), mode='lines', name='Upper std bound',
+                    fill=None)
+    fig.add_scatter(x=df['Date'].iloc[-N - 1:], y=E_S_t - np.sqrt(Var_S_t), mode='lines', name='Lower std bound',
+                    fill='tonexty', fillcolor='rgba(255,165,0,0.1)')
+    return fig
+
+
+def price_chart(price_db):
+    fig = px.line(price_db, x='Date', y=['Close'], title='BTC Price - Log scale')
+    fig.update_yaxes(title_text="Price [USD]")
+    fig.update_layout(showlegend=False)
+    return fig
+
+
 def rolling_volatility_chart(price_db, window=30):
     price_db = log_returns(price_db)
-    price_db["rollingVolatility"] = price_db["LogReturns"].rolling(window).std() * np.sqrt(365)
-    fig = px.line(price_db, x='Date', y="rollingVolatility",
-                  title=f"BTC rolling (annualized) volatility for the previous {window} days",
-                  labels="Rolling Volatility")
+    price_db[f"Rolling: {window} days"] = price_db["LogReturns"].rolling(window, min_periods=np.minimum(10, window)).std() * np.sqrt(365)
+    price_db["Instantaneous"] = price_db["LogReturns"].abs()*np.sqrt(365)
+    fig = px.line(price_db, x='Date', y=[f"Rolling: {window} days"],
+                  title=f"BTC historical volatility measures")
     ymin = 0
-    ymax = price_db["rollingVolatility"].max()
-    fig.update_yaxes(range=[ymin, ymax * 1.1])
+    ymax = price_db[f"Rolling: {window} days"].max()
+    fig.update_yaxes(range=[ymin, ymax * 1.1], title_text="Volatility")
     fig.update_traces(line=dict(color="black"))
     # historical volatility
-    fig.add_hline(y=price_db["LogReturns"].std()*np.sqrt(365), line_dash="dash", line_color="red", name="Historical Volatility")
-    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=.99, xanchor="left", x=0))
-    fig.update_layout(showlegend=True)
+    fig.add_hline(y=price_db["LogReturns"].std()*np.sqrt(365), line_dash="dash", line_color="red",
+                  name="All time",  showlegend=True)
+    fig.update_layout(legend=dict(orientation="v", yanchor="top", y=.98, xanchor="right", x=0.99, title=None))
     return fig
 
 
@@ -89,13 +126,15 @@ def call_spot_curve(S, X, T, r, v):
 
 
 def delta_hedging_curve(S, X, T, r, v):
-    spot_prices = np.linspace(0, 2*S, 1000)
-    call_prices = BlackScholesModel(spot_prices, X, T, r, v).option_price(OptionType.CALL_OPTION)
+    spot_prices = np.linspace(0, 2*X, 1000)
+    delta_hedges = BlackScholesModel(spot_prices, X, T, r, v).delta_hedging(OptionType.CALL_OPTION)
     df = pd.DataFrame(index=spot_prices)
-    df["C(S,X,T,r,v)"] = call_prices
-    df["Payoff"] = np.maximum(0, spot_prices - X)
-
-    fig = px.line(df, x=df.index, y=df.columns, labels={"x": "Spot Price", "y": "Option Price"}, title='Call option')
+    df[f"{chr(916)}(S,X,T,r,v)"] = delta_hedges
+    fig = px.line(df, x=df.index, y=df.columns, title='Delta hedging')
+    fig.update_yaxes(title_text="Underlying held fraction")
+    fig.update_xaxes(title_text="Underlying (spot) price")
+    fig.add_vline(x=X, name="Strike price", line_color="green", line_dash="dot", showlegend=True)
+    fig.add_vline(x=S, name="Spot price", line_color="orange", line_dash="dash", showlegend=True)
     return fig
 
 

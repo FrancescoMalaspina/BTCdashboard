@@ -7,16 +7,29 @@ import numpy as np
 # Local package imports
 # from .data import BTCprice as data
 from components.option_pricing.black_scholes import BlackScholesModel, OptionType
-from .tools import call_spot_curve
+from .tools import call_spot_curve, delta_hedging_curve
 
 dash.register_page(__name__)
 
 call = dbc.Card([
-    dbc.CardHeader("Call"),
+    dbc.CardHeader("Call price"),
     dbc.CardBody(id="call-price-card"),
 ])
 
+put = dbc.Card([
+    dbc.CardHeader("Put price"),
+    dbc.CardBody(id="put-price-card"),
+])
+
+delta = dbc.Card([
+    dbc.CardHeader("Delta hedging"),
+    dbc.CardBody(id="delta-hedging-card"),
+])
+
 col1 = dbc.Col([
+    html.Br(),
+    html.H1('Black & Scholes'),
+    html.Br(),
     dbc.Label("Spot price"),
     dcc.Slider(
         id="input-S",
@@ -51,7 +64,7 @@ col1 = dbc.Col([
         max=0.1,
         step=1e-3,
         value=5e-2,
-        marks={i: f"{i*100:.0f}%" for i in np.linspace(0, 0.1, 11)}
+        marks={i: f"{i * 100:.0f}%" for i in np.linspace(0, 0.1, 11)}
     ),
     dbc.Label("Volatility"),
     dcc.Slider(
@@ -60,23 +73,32 @@ col1 = dbc.Col([
         max=1.5,
         step=1e-2,
         value=0.75,
-        marks={i: f"{i*100:.0f}%" for i in np.linspace(0, 1.5, 11)}
+        marks={i: f"{i * 100:.0f}%" for i in np.linspace(0, 1.5, 11)}
     ),
     html.Br(),
+    html.Br(),
     call,
-], width=4)
+    html.Br(),
+    # put,
+    html.Br(),
+    delta,
+], width=4, align="stretch")
 
-col2 = dbc.Col([dcc.Graph(figure={}, id='call-spot-curve')])
+col2 = dbc.Col(
+    [
+        dcc.Graph(figure={}, id='call-spot-curve'),
+        dcc.Graph(figure={}, id='delta-hedging-curve')
+    ]
+)
 
 layout = dbc.Container([
-    html.Br(),
-    html.H1('Black & Scholes'),
     html.Br(),
     dbc.Row([
         col1,
         col2,
     ]),
 ])
+
 
 @callback(
     Output('call-price-card', 'children'),
@@ -87,20 +109,44 @@ layout = dbc.Container([
      Input("input-v", "value")]
 )
 def update_call_price(S, X, T, r, v):
-    optionModel = BlackScholesModel(S, X, T, r, v)
-    return optionModel.option_price(OptionType.CALL_OPTION)
+    call_price = BlackScholesModel(S, X, T, r, v).option_price(OptionType.CALL_OPTION)
+    return html.H5(f"{call_price:.2f}")
 
 
 @callback(
-    Output('call-spot-curve', 'figure'),
-    [
-     Input('input-S', 'value'),
+    Output('delta-hedging-card', 'children'),
+    [Input('input-S', 'value'),
      Input('input-X', 'value'),
      Input('input-T', 'value'),
      Input("input-r", "value"),
      Input("input-v", "value")]
 )
-def update_call_price(S, X, T, r, v):
+def update_delta_hedging(S, X, T, r, v):
+    delta_hedging = BlackScholesModel(S, X, T, r, v).delta_hedging(OptionType.CALL_OPTION)
+    return html.H5(f"{delta_hedging:.2f}")
+
+
+@callback(
+    Output('call-spot-curve', 'figure'),
+    [
+        Input('input-S', 'value'),
+        Input('input-X', 'value'),
+        Input('input-T', 'value'),
+        Input("input-r", "value"),
+        Input("input-v", "value")]
+)
+def update_call_price_curve(S, X, T, r, v):
     return call_spot_curve(S, X, T, r, v)
 
 
+@callback(
+    Output('delta-hedging-curve', 'figure'),
+    [
+        Input('input-S', 'value'),
+        Input('input-X', 'value'),
+        Input('input-T', 'value'),
+        Input("input-r", "value"),
+        Input("input-v", "value")]
+)
+def update_delta_hedging_curve(S, X, T, r, v):
+    return delta_hedging_curve(S, X, T, r, v)
