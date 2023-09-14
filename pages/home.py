@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
 # Local package imports
-from .data import BTCprice as data
+from components.data import BTCprice as data
 
 dash.register_page(__name__, path='/')
 

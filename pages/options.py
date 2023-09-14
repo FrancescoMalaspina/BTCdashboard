@@ -7,7 +7,7 @@ import numpy as np
 # Local package imports
 # from .data import BTCprice as data
 from components.option_pricing.black_scholes import BlackScholesModel, OptionType
-from .tools import call_spot_curve, delta_hedging_curve
+from components.tools import call_spot_curve, delta_hedging_curve
 
 dash.register_page(__name__)
 

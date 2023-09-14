@@ -6,9 +6,9 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 
 # Local package imports
-from .tools import log_return_plot, rolling_volatility_plot, log_return_histogram, log_log_return_histogram, \
+from components.tools import log_return_plot, rolling_volatility_plot, log_return_histogram, log_log_return_histogram, \
     price_plot, log_price_plot, instaneous_volatility_plot, lognormal_evolution_plot
-from .data import BTCprice as data
+from components.data import BTCprice as data
 
 dash.register_page(__name__)
 
@@ -169,9 +169,9 @@ def latex_beyond_GBM():
             ''', dangerously_allow_html=False, mathjax=True))
     ])
     beyond_GBM_2 = dcc.Markdown(r'''
-        In the end, the efficient market hypothesis result, instead, verified in extremely high frequency (usually minutes), and 
-        will continue to improve its efficiency with automated trading.
-        This could be shown by computing autocorrelations in high frequency Log-Returns, but I have yet to obtain a 
+        In the end, the efficient market hypothesis result, instead, verified after a really short time (usually minutes).
+        Moreover, the market will continue to improve its efficiency in the following years with automated trading.
+        This could be shown by computing autocorrelations in high frequency Log-Returns, but I am yet to obtain a 
         reliable dataset with this kind of data.
 
             ''', dangerously_allow_html=False, mathjax=True)

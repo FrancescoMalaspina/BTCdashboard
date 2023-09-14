@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from scipy.stats import norm, t, powerlaw
+from scipy.stats import norm, t
 
 from components.option_pricing.black_scholes import BlackScholesModel, OptionType
 
