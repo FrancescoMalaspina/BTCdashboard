@@ -2,7 +2,12 @@
 
 ## About this app
 
-I want to create a dashboard for tracking Bitcoin price, implementing a few Stochastic Calculus analyses, and building a toy Put/Call option (TODO), based on Black&Scholes European option pricing.
+This app implements a dashboard, using the Plolty Dash Framework, for Bitcoin price analysis.
+
+It implements 3 different pages:
+- the Homepage presents a price Card and CandleStick price chart;
+- the Analitcs page details an analysis of historical prices, through the lens of Econophysics and Stochastic Calculus;
+- the Options page contains a toy Put/Call option, based on Black&Scholes European option pricing (TODO: implement MonteCarlo and Binomial Tree option pricing).
 
 The app is deployed in `pythonanywhere` at link [http://photonicaardvark.eu.pythonanywhere.com/](http://photonicaardvark.eu.pythonanywhere.com/).
 
