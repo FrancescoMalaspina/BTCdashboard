@@ -40,8 +40,7 @@ pip install -r requirements.txt
 
 Run this app locally with:
 ```
-cd DashApp
-python app.py
+python3 app.py
 ```
 
 ## Screenshot
